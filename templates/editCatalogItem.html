@@ -1,0 +1,19 @@
+<html>
+<body>
+
+  <h1>Edit Catalog Item {{editCatalogItem.name}}</h1>
+
+  <form method='POST' action='{{url_for('editCatalogItem', shop_id=shop.id, catalog_id=editCatalogItem.id)}}'>
+    <p>New name:</p>
+    <input type='text' size='30' name='name' placeholder='{{editCatalogItem.name}}'>
+    <p>New vintage:</p>
+    <input type='text' size='30' name='vintage' placeholder='{{editCatalogItem.vintage}}'>
+    <p>New price:</p>
+    <input type='text' size='30' name='price' placeholder='{{editCatalogItem.price}}'>
+    </br></br>
+    <input type='submit' value='Edit'>
+    <a href='{{url_for('showShops')}}'>Cancel</a>
+  </form>
+
+</body>
+</html>

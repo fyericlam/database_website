@@ -91,9 +91,22 @@ def newCatalogItem(shop_id):
         return render_template('newCatalogItem.html', shop=shop)
 
 
-@app.route('/shops/<int:shop_id>/catalog/<int:catalog_id>/edit/')
+@app.route('/shops/<int:shop_id>/catalog/<int:catalog_id>/edit/', methods=['GET', 'POST'])
 def editCatalogItem(shop_id, catalog_id):
-    return 'This page edits catalog item {}'.format(catalog_id)
+    """This page edits catalog item <catalog_id>"""
+    shop = session.query(Shop).filter_by(id=shop_id).one()
+    editCatalogItem = session.query(CatalogItem).filter_by(id=catalog_id).one()
+    if request.method == 'POST':
+        editCatalogItem.name = request.form['name']
+        editCatalogItem.vintage = request.form['vintage']
+        editCatalogItem.price = request.form['price']
+        session.add(editCatalogItem)
+        session.commit()
+        return redirect(url_for('showCatalog', shop_id=shop_id))
+    else:
+        return render_template('editCatalogItem.html',
+                               shop=shop,
+                               editCatalogItem=editCatalogItem)
 
 
 @app.route('/shops/<int:shop_id>/catalog/<int:catalog_id>/delete/')
