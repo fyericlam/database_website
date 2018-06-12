@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -16,7 +16,9 @@ session = DBSession()
 @app.route('/')
 @app.route('/shops/')
 def showShops():
-    return 'This page shows all my shops'
+    """This page shows all my shops"""
+    shops = session.query(Shop).all()
+    return render_template('showShops.html', shops=shops)
 
 
 @app.route('/shops/new/')
