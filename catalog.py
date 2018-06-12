@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify,\
+    flash
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -37,6 +38,7 @@ def newShop():
         newShop = Shop(name=request.form['name'])
         session.add(newShop)
         session.commit()
+        flash('New shop sucessfully created!')
         return redirect(url_for('showShops'))
     else:
         return render_template('newShop.html')
@@ -51,6 +53,7 @@ def editShop(shop_id):
         editShop.name = request.form['name']
         session.add(editShop)
         session.commit()
+        flash('Shop sucessfully edited!')
         return redirect(url_for('showShops'))
     else:
         return render_template('editshop.html',
@@ -65,6 +68,7 @@ def deleteShop(shop_id):
     if request.method == 'POST':
         session.delete(deleteShop)
         session.commit()
+        flash('Shop sucessfully deleted!')
         return redirect(url_for('showShops'))
     else:
         return render_template('deleteShop.html',
@@ -119,6 +123,7 @@ def newCatalogItem(shop_id):
                                      shop_id=shop_id)
         session.add(newCatalogItem)
         session.commit()
+        flash('Catalog item sucessfully created!')
         return redirect(url_for('showCatalog', shop_id=shop_id))
     else:
         return render_template('newCatalogItem.html', shop=shop)
@@ -136,6 +141,7 @@ def editCatalogItem(shop_id, catalog_id):
         editCatalogItem.price = request.form['price']
         session.add(editCatalogItem)
         session.commit()
+        flash('Catalog item sucessfully edited!')
         return redirect(url_for('showCatalog', shop_id=shop_id))
     else:
         return render_template('editCatalogItem.html',
@@ -153,6 +159,7 @@ def deleteCatalogItem(shop_id, catalog_id):
     if request.method == 'POST':
         session.delete(deleteCatalogItem)
         session.commit()
+        flash('Catalog item sucessfully deleted!')
         return redirect(url_for('showCatalog', shop_id=shop_id))
     else:
         return render_template('deleteCatalogItem.html',
@@ -161,5 +168,6 @@ def deleteCatalogItem(shop_id, catalog_id):
 
 
 if __name__ == '__main__':
+    app.secret_key = 'ericlam'
     app.debug = True
     app.run(host='0.0.0.0', port=5000)

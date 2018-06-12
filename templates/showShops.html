@@ -3,6 +3,16 @@
 
   <h1>My Shops</h1>
 
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <li>{{message}}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  {% endwith %}
+
   {% for shop in shops %}
   <div>
     <p>{{shop.name}}</p>
