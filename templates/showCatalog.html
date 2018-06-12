@@ -1,0 +1,21 @@
+<html>
+<body>
+
+  <h1>Catalog for {{shop.name}}</h1>
+
+  {% for item in showCatalog %}
+  <div>
+    <h3>{{item.name}}</h3>
+      <ul>
+        <li>{{item.price}}</li>
+        <li>{{item.score}}</li>
+        <li>{{item.region}}</li>
+        <li>{{item.grape}}</li>
+        <li>{{item.style}}</li>
+        <li>{{item.food}}</li>
+      </ul>
+  </div>
+  {% endfor %}
+
+</body>
+</html>

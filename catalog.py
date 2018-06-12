@@ -65,7 +65,14 @@ def deleteShop(shop_id):
 @app.route('/shops/<int:shop_id>/')
 @app.route('/shops/<int:shop_id>/catalog/')
 def showCatalog(shop_id):
-    return 'This page displays catalog for shop {}'.format(shop_id)
+    """This page displays catalog for shop <shop_id>"""
+    shop = session.query(Shop).filter_by(
+        id=shop_id).one()
+    showCatalog = session.query(CatalogItem).filter_by(
+        shop_id=shop_id).all()
+    return render_template('showCatalog.html',
+                           shop=shop,
+                           showCatalog=showCatalog)
 
 
 @app.route('/shops/<int:shop_id>/catalog/new/')
