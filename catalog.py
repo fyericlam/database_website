@@ -75,10 +75,20 @@ def showCatalog(shop_id):
                            showCatalog=showCatalog)
 
 
-@app.route('/shops/<int:shop_id>/catalog/new/')
+@app.route('/shops/<int:shop_id>/catalog/new/', methods=['GET', 'POST'])
 def newCatalogItem(shop_id):
-    return 'This page makes new catalog item for shop {}'.format(
-        shop_id)
+    """This page makes new catalog item for shop <shop_id>"""
+    shop = session.query(Shop).filter_by(id=shop_id).one()
+    if request.method == 'POST':
+        newCatalogItem = CatalogItem(name=request.form['name'],
+                                     vintage=request.form['vintage'],
+                                     price=request.form['price'],
+                                     shop_id=shop_id)
+        session.add(newCatalogItem)
+        session.commit()
+        return redirect(url_for('showCatalog', shop_id=shop_id))
+    else:
+        return render_template('newCatalogItem.html', shop=shop)
 
 
 @app.route('/shops/<int:shop_id>/catalog/<int:catalog_id>/edit/')
