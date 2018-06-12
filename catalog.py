@@ -48,9 +48,18 @@ def editShop(shop_id):
                                editShop=editShop)
 
 
-@app.route('/shops/<int:shop_id>/delete/')
+@app.route('/shops/<int:shop_id>/delete/', methods=['GET', 'POST'])
 def deleteShop(shop_id):
-    return 'This page deletes shop {}'.format(shop_id)
+    """This page deletes shop <shop_id>"""
+    deleteShop = session.query(Shop).filter_by(
+        id=shop_id).one()
+    if request.method == 'POST':
+        session.delete(deleteShop)
+        session.commit()
+        return redirect(url_for('showShops'))
+    else:
+        return render_template('deleteShop.html',
+                               deleteShop=deleteShop)
 
 
 @app.route('/shops/<int:shop_id>/')
