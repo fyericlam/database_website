@@ -109,9 +109,20 @@ def editCatalogItem(shop_id, catalog_id):
                                editCatalogItem=editCatalogItem)
 
 
-@app.route('/shops/<int:shop_id>/catalog/<int:catalog_id>/delete/')
+@app.route('/shops/<int:shop_id>/catalog/<int:catalog_id>/delete/', methods=['GET', 'POST'])
 def deleteCatalogItem(shop_id, catalog_id):
-    return 'This page deletes catalog item {}'.format(catalog_id)
+    """This page deletes catalog item <catalog_id>"""
+    shop = session.query(Shop).filter_by(id=shop_id).one()
+    deleteCatalogItem = session.query(
+        CatalogItem).filter_by(id=catalog_id).one()
+    if request.method == 'POST':
+        session.delete(deleteCatalogItem)
+        session.commit()
+        return redirect(url_for('showCatalog', shop_id=shop_id))
+    else:
+        return render_template('deleteCatalogItem.html',
+                               shop=shop,
+                               deleteCatalogItem=deleteCatalogItem)
 
 
 if __name__ == '__main__':
