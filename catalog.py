@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -19,6 +19,15 @@ def showShops():
     """This page shows all my shops"""
     shops = session.query(Shop).all()
     return render_template('showShops.html', shops=shops)
+
+
+@app.route('/shops/JSON/')
+def showShops_JSON():
+    """This page shows all my shops in JSON"""
+    shops = session.query(Shop).all()
+    cols = ['name']
+    results = [{col: getattr(shop, col) for col in cols} for shop in shops]
+    return jsonify(Shops=results)
 
 
 @app.route('/shops/new/', methods=['GET', 'POST'])
@@ -75,6 +84,30 @@ def showCatalog(shop_id):
                            showCatalog=showCatalog)
 
 
+@app.route('/shops/<int:shop_id>/catalog/JSON/')
+def showCatalog_JSON(shop_id):
+    """This page displays catalog for shop <shop_id> in JSON"""
+    showCatalog = session.query(CatalogItem).filter_by(
+        shop_id=shop_id).all()
+    cols = ['name', 'vintage', 'price', 'score',
+            'producer', 'region', 'grape', 'food', 'style']
+    results = [{col: getattr(item, col) for col in cols}
+               for item in showCatalog]
+    return jsonify(Catalog=results)
+
+
+@app.route('/shops/<int:shop_id>/catalog/<int:catalog_id>/JSON/')
+def showCatalogItem_JSON(shop_id, catalog_id):
+    """This page displays catalog item <catalog_id> for shop <shop_id> in JSON
+    """
+    showCatalogItem = session.query(CatalogItem).filter_by(
+        shop_id=shop_id, id=catalog_id).one()
+    cols = ['name', 'vintage', 'price', 'score',
+            'producer', 'region', 'grape', 'food', 'style']
+    result = {col: getattr(showCatalogItem, col) for col in cols}
+    return jsonify(Catalog=result)
+
+
 @app.route('/shops/<int:shop_id>/catalog/new/', methods=['GET', 'POST'])
 def newCatalogItem(shop_id):
     """This page makes new catalog item for shop <shop_id>"""
@@ -91,7 +124,8 @@ def newCatalogItem(shop_id):
         return render_template('newCatalogItem.html', shop=shop)
 
 
-@app.route('/shops/<int:shop_id>/catalog/<int:catalog_id>/edit/', methods=['GET', 'POST'])
+@app.route('/shops/<int:shop_id>/catalog/<int:catalog_id>/edit/',
+           methods=['GET', 'POST'])
 def editCatalogItem(shop_id, catalog_id):
     """This page edits catalog item <catalog_id>"""
     shop = session.query(Shop).filter_by(id=shop_id).one()
@@ -109,7 +143,8 @@ def editCatalogItem(shop_id, catalog_id):
                                editCatalogItem=editCatalogItem)
 
 
-@app.route('/shops/<int:shop_id>/catalog/<int:catalog_id>/delete/', methods=['GET', 'POST'])
+@app.route('/shops/<int:shop_id>/catalog/<int:catalog_id>/delete/',
+           methods=['GET', 'POST'])
 def deleteCatalogItem(shop_id, catalog_id):
     """This page deletes catalog item <catalog_id>"""
     shop = session.query(Shop).filter_by(id=shop_id).one()
