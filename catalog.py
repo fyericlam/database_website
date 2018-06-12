@@ -33,9 +33,19 @@ def newShop():
         return render_template('newShop.html')
 
 
-@app.route('/shops/<int:shop_id>/edit/')
+@app.route('/shops/<int:shop_id>/edit/', methods=['GET', 'POST'])
 def editShop(shop_id):
-    return 'This page edits shop {}'.format(shop_id)
+    """This page edits shop <shop_id>"""
+    editShop = session.query(Shop).filter_by(
+        id=shop_id).one()
+    if request.method == 'POST':
+        editShop.name = request.form['name']
+        session.add(editShop)
+        session.commit()
+        return redirect(url_for('showShops'))
+    else:
+        return render_template('editshop.html',
+                               editShop=editShop)
 
 
 @app.route('/shops/<int:shop_id>/delete/')
