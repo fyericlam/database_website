@@ -10,8 +10,9 @@
     <input type='text' size='30' name='vintage'>
     <p>Price:</p>
     <input type='text' size='30' name='price'>
-    </br></br>  
+    </br></br>
     <input type='submit' value='Make'>
+    <a href='{{url_for('showCatalog', shop_id=shop.id)}}'>Cancel<a>
   </form>
 
 </body>

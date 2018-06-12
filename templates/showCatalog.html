@@ -13,19 +13,26 @@
     {% endif %}
   {% endwith %}
 
+  <a href='{{url_for('newCatalogItem', shop_id=shop.id)}}'>Make New Catalog Item<a>
+
   {% for item in showCatalog %}
   <div>
     <h3>{{item.name}}</h3>
-      <ul>
-        <li>{{item.price}}</li>
-        <li>{{item.score}}</li>
-        <li>{{item.region}}</li>
-        <li>{{item.grape}}</li>
-        <li>{{item.style}}</li>
-        <li>{{item.food}}</li>
-      </ul>
+    <ul>
+      <li>{{item.price}}</li>
+      <li>{{item.score}}</li>
+      <li>{{item.region}}</li>
+      <li>{{item.grape}}</li>
+      <li>{{item.style}}</li>
+      <li>{{item.food}}</li>
+    </ul>
+    <a href='{{url_for('editCatalogItem', shop_id=shop.id, catalog_id=item.id)}}'>Edit<a>
+    <a href='{{url_for('deleteCatalogItem', shop_id=shop.id, catalog_id=item.id)}}'>Delete<a>
   </div>
   {% endfor %}
+
+  </br></br>
+  <a href='{{url_for('showShops')}}'>Back to shop list<a>
 
 </body>
 </html>

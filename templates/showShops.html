@@ -13,9 +13,12 @@
     {% endif %}
   {% endwith %}
 
+  <a href='{{url_for('newShop')}}'>Make New Shop</a>
+
   {% for shop in shops %}
   <div>
     <p>{{shop.name}}</p>
+    <a href='{{url_for('showCatalog', shop_id=shop.id)}}'>Catalog</a>
   </div>
   {% endfor %}
 
