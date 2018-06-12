@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -21,9 +21,16 @@ def showShops():
     return render_template('showShops.html', shops=shops)
 
 
-@app.route('/shops/new/')
+@app.route('/shops/new/', methods=['GET', 'POST'])
 def newShop():
-    return 'This page makes new shop'
+    """This page makes new shop"""
+    if request.method == 'POST':
+        newShop = Shop(name=request.form['name'])
+        session.add(newShop)
+        session.commit()
+        return redirect(url_for('showShops'))
+    else:
+        return render_template('newShop.html')
 
 
 @app.route('/shops/<int:shop_id>/edit/')
