@@ -21,8 +21,8 @@ session.commit()
 
 catalogItem1 = CatalogItem(name="2005 Domaine Ponsot Clos de la Roche Grand Cru 'Cuvee Vieilles Vignes'",
                            vintage='2005',
-                           price='$9447',
-                           score='95',
+                           price='$9,447',
+                           score='95/100',
                            producer='Domaine Ponsot',
                            region='Clos de la Roche, Morey-Saint-Denis, Cote de Nuits, Burgundy, France',
                            grape='Pinot Noir',
@@ -39,8 +39,8 @@ session.commit()
 
 catalogItem2 = CatalogItem(name='2004 Krug Brut',
                            vintage='2004',
-                           price='$2136',
-                           score='90',
+                           price='$2,136',
+                           score='90/100',
                            producer='Krug',
                            region='Champagne, France',
                            grape='Champagne Blend',
