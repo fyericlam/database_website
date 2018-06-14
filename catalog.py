@@ -311,8 +311,11 @@ def showShops_JSON():
 @app.route('/shops/new/', methods=['GET', 'POST'])
 def newShop():
     """This page makes new shop"""
+    if 'username' not in login_session:
+        return redirect('/login')
     if request.method == 'POST':
-        newShop = Shop(name=request.form['name'])
+        newShop = Shop(name=request.form['name'],
+                       user_id=login_session['user_id'])
         session.add(newShop)
         session.commit()
         flash('New shop sucessfully created!')
@@ -324,8 +327,11 @@ def newShop():
 @app.route('/shops/<int:shop_id>/edit/', methods=['GET', 'POST'])
 def editShop(shop_id):
     """This page edits shop <shop_id>"""
-    editShop = session.query(Shop).filter_by(
-        id=shop_id).one()
+    if 'username' not in login_session:
+        return redirect('/login')
+    editShop = session.query(Shop).filter_by(id=shop_id).one()
+    if editShop.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('Only owner is authorized to edit shop.');} window.location='/shops/';</script><body onload='myFunction()'>"
     if request.method == 'POST':
         editShop.name = request.form['name']
         session.add(editShop)
@@ -340,8 +346,12 @@ def editShop(shop_id):
 @app.route('/shops/<int:shop_id>/delete/', methods=['GET', 'POST'])
 def deleteShop(shop_id):
     """This page deletes shop <shop_id>"""
+    if 'username' not in login_session:
+        return redirect('/login')
     deleteShop = session.query(Shop).filter_by(
         id=shop_id).one()
+    if deleteShop.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('Only owner is authorized to delete shop.');} window.location='/shops/';</script><body onload='myFunction()'>"
     if request.method == 'POST':
         session.delete(deleteShop)
         session.commit()
@@ -356,16 +366,19 @@ def deleteShop(shop_id):
 @app.route('/shops/<int:shop_id>/catalog/')
 def showCatalog(shop_id):
     """This page displays catalog for shop <shop_id>"""
-    shop = session.query(Shop).filter_by(
-        id=shop_id).one()
-    user = session.query(User).filter_by(
-        id=shop.user_id).one()
-    showCatalog = session.query(CatalogItem).filter_by(
-        shop_id=shop_id).all()
-    return render_template('showCatalog.html',
-                           shop=shop,
-                           user=user,
-                           showCatalog=showCatalog)
+    shop = session.query(Shop).filter_by(id=shop_id).one()
+    owner = session.query(User).filter_by(id=shop.user_id).one()
+    catalog = session.query(CatalogItem).filter_by(shop_id=shop_id).all()
+    if 'username' not in login_session or owner.id != login_session['user_id']:
+        return render_template('showCatalog.html',
+                               shop=shop,
+                               owner=owner,
+                               catalog=catalog)
+    else:
+        return render_template('showCatalog_private.html',
+                               shop=shop,
+                               owner=owner,
+                               catalog=catalog)
 
 
 @app.route('/shops/<int:shop_id>/catalog/JSON/')
@@ -395,7 +408,11 @@ def showCatalogItem_JSON(shop_id, catalog_id):
 @app.route('/shops/<int:shop_id>/catalog/new/', methods=['GET', 'POST'])
 def newCatalogItem(shop_id):
     """This page makes new catalog item for shop <shop_id>"""
+    if 'username' not in login_session:
+        return redirect('/login')
     shop = session.query(Shop).filter_by(id=shop_id).one()
+    if shop.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('Only owner is authorized to create item.'); window.location='/shops/';}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         newCatalogItem = CatalogItem(name=request.form['name'],
                                      vintage=request.form['vintage'],
@@ -413,7 +430,11 @@ def newCatalogItem(shop_id):
            methods=['GET', 'POST'])
 def editCatalogItem(shop_id, catalog_id):
     """This page edits catalog item <catalog_id>"""
+    if 'username' not in login_session:
+        return redirect('/login')
     shop = session.query(Shop).filter_by(id=shop_id).one()
+    if shop.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('Only owner is authorized to edit item.'); window.location='/shops/';}</script><body onload='myFunction()'>"
     editCatalogItem = session.query(CatalogItem).filter_by(id=catalog_id).one()
     if request.method == 'POST':
         editCatalogItem.name = request.form['name']
@@ -433,9 +454,13 @@ def editCatalogItem(shop_id, catalog_id):
            methods=['GET', 'POST'])
 def deleteCatalogItem(shop_id, catalog_id):
     """This page deletes catalog item <catalog_id>"""
+    if 'username' not in login_session:
+        return redirect('/login')
     shop = session.query(Shop).filter_by(id=shop_id).one()
-    deleteCatalogItem = session.query(
-        CatalogItem).filter_by(id=catalog_id).one()
+    if shop.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('Only owner is authorized to delete item.'); window.location='/shops/';}</script><body onload='myFunction()'>"
+    deleteCatalogItem = session.query(CatalogItem).filter_by(
+        id=catalog_id).one()
     if request.method == 'POST':
         session.delete(deleteCatalogItem)
         session.commit()

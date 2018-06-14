@@ -21,6 +21,8 @@
   <div>
     <p>{{shop.name}}</p>
     <a href='{{url_for('showCatalog', shop_id=shop.id)}}'>Catalog</a>
+    <a href='{{url_for('editShop', shop_id=shop.id)}}'>Edit</a>
+    <a href='{{url_for('deleteShop', shop_id=shop.id)}}'>Delete</a>
   </div>
   {% endfor %}
 
