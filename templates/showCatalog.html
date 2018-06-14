@@ -1,7 +1,7 @@
 <html>
 <body>
 
-  <h1>Catalog for {{shop.name}}</h1>
+  <h1>Catalog for {{shop.name}} (owner: {{user.name}})</h1>
 
   {% with messages = get_flashed_messages() %}
     {% if messages %}

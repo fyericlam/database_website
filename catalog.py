@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify,\
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Shop, CatalogItem
+from database_setup import Base, User, Shop, CatalogItem
 
 app = Flask(__name__)
 
@@ -81,10 +81,13 @@ def showCatalog(shop_id):
     """This page displays catalog for shop <shop_id>"""
     shop = session.query(Shop).filter_by(
         id=shop_id).one()
+    user = session.query(User).filter_by(
+        id=shop.user_id).one()
     showCatalog = session.query(CatalogItem).filter_by(
         shop_id=shop_id).all()
     return render_template('showCatalog.html',
                            shop=shop,
+                           user=user,
                            showCatalog=showCatalog)
 
 
