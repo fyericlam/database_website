@@ -1,9 +1,7 @@
 <html>
 <body>
 
-<a href="{{url_for('showLogin')}}">Log in</a>
-
-  <h1>Catalog for {{shop.name}} (owner: {{owner.name}})</h1>
+  <h1>Items for {{catalog.name}} (owner: {{owner.name}})</h1>
 
   {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -15,22 +13,24 @@
     {% endif %}
   {% endwith %}
 
-  {% for item in catalog %}
+  {% for item in items %}
   <div>
     <h3>{{item.name}}</h3>
     <ul>
+      <li>{{item.vintage}}</li>
       <li>{{item.price}}</li>
       <li>{{item.score}}</li>
+      <li>{{item.producer}}</li>
       <li>{{item.region}}</li>
       <li>{{item.grape}}</li>
-      <li>{{item.style}}</li>
       <li>{{item.food}}</li>
+      <li>{{item.style}}</li>
     </ul>
   </div>
   {% endfor %}
 
   </br></br>
-  <a href='{{url_for('showShops')}}'>Back to shop list<a>
+  <a href='{{url_for('showCatalogs')}}'>Back to catalog list<a>
 
 </body>
 </html>

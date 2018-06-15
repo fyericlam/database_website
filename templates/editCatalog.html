@@ -1,0 +1,14 @@
+<html>
+<body>
+
+  <h1>Edit {{editCatalog.name}}</h1>
+
+  <form method='POST' action='{{url_for('editCatalog', catalog_id=editCatalog.id)}}'>
+    <p>New name:</p>
+    <input type='text' size='80' name='name' placeholder='Provide a meaningful and funny name'>
+    <input type='submit' value='Edit'>
+    <a href='{{url_for('showCatalogs')}}'>Cancel</a>
+  </form>
+
+</body>
+</html>

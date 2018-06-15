@@ -17,9 +17,9 @@ class User(Base):
     picture = Column(String(80))
 
 
-class Shop(Base):
+class Catalog(Base):
     # Table information
-    __tablename__ = 'shop'
+    __tablename__ = 'catalog'
     # Mappers
     name = Column(String(80), nullable=False)
     id = Column(Integer, primary_key=True)
@@ -27,9 +27,9 @@ class Shop(Base):
     user = relationship(User)
 
 
-class CatalogItem(Base):
+class Item(Base):
     # Table information
-    __tablename__ = 'catalog_item'
+    __tablename__ = 'item'
     # Mappers
     name = Column(String(80), nullable=False)
     id = Column(Integer, primary_key=True)
@@ -41,13 +41,13 @@ class CatalogItem(Base):
     grape = Column(String(50))
     food = Column(String(100))
     style = Column(String(100))
-    shop_id = Column(Integer, ForeignKey('shop.id'))
-    shop = relationship(Shop)
+    catalog_id = Column(Integer, ForeignKey('catalog.id'))
+    catalog = relationship(Catalog)
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
 
 
 # Configuration (ending)
-engine = create_engine('sqlite:///shopCatalog.db')
+engine = create_engine('sqlite:///catalog.db')
 
 Base.metadata.create_all(engine)

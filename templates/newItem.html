@@ -1,0 +1,75 @@
+<html>
+<body>
+
+  <h1>Make New Item for {{catalog.name}}</h1>
+
+  <form method='POST' action='{{url_for('newItem', catalog_id=catalog.id)}}'>
+    <p>Name:</p>
+    <input type='text' size='80' name='name'>
+    <p>Vintage:</p>
+    <input type='text' size='20' name='vintage' placeholder='e.g., 1999'>
+    <p>Price:</p>
+    <input type='text' size='20' name='price' placeholder='e.g., $1,000'>
+    <p>Score:</p>
+    <input type='text' size='20' name='score' placeholder='e.g., 99/100'>
+    <p>Producer:</p>
+    <input type='text' size='80' name='producer'>
+    <p>Region:</p>
+    <input type='text' size='80' name='region'>
+    <p>Grape:</p>
+    <input type='text' size='80' name='grape'>
+
+    </br></br>
+    <label for='food'>Food:</label>
+    </br></br>
+    <div class='radio'>
+      <label>
+        <input type='radio' name='food' id='food1' value='Chicken and Turkey'>Chicken and Turkey
+      </label>
+    </div>
+    <div class='radio'>
+      <label>
+        <input type=radio name='food' id='food2' value='Duck, Goose and Game Birds'>Duck, Goose and Game Birds
+      </label>
+    </div>
+    <div class='radio'>
+      <label>
+        <input type=radio name='food' id='food3' value='Pork'>Pork
+      </label>
+    </div>
+    <div class='radio'>
+      <label>
+        <input type=radio name='food' id='food4' value='Lamb'>Lamb
+      </label>
+    </div>
+    <div class='radio'>
+      <label>
+        <input type=radio name='food' id='food5' value='Beef and Venison'>Beef and Venison
+      </label>
+    </div>
+    <div class='radio'>
+      <label>
+        <input type=radio name='food' id='food6' value='White Fish'>White Fish
+      </label>
+    </div>
+    <div class='radio'>
+      <label>
+        <input type=radio name='food' id='food7' value='Meaty and Oily Fish'>Meaty and Oily Fish
+      </label>
+    </div>
+    <div class='radio'>
+      <label>
+        <input type=radio name='food' id='food8' value='Shellfish, Crab and Lobster'>Shellfish, Crab and Lobster
+      </label>
+    </div>
+
+    <p>Style:</p>
+    <input type='text' size='80' name='style'>
+    
+    </br></br>
+    <input type='submit' value='Make'>
+    <a href='{{url_for('showItems', catalog_id=catalog.id)}}'>Cancel<a>
+  </form>
+
+</body>
+</html>

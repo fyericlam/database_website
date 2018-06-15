@@ -1,0 +1,30 @@
+<html>
+<body>
+
+<a href="{{url_for('disconnect')}}">Logout</a>
+
+  <h1>The Catalogs</h1>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <li>{{message}}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  {% endwith %}
+
+  <a href='{{url_for('newCatalog')}}'>Make New Catalog</a>
+
+  {% for catalog in catalogs %}
+  <div>
+    <p>{{catalog.name}}</p>
+    <a href='{{url_for('showItems', catalog_id=catalog.id)}}'>Show Items</a>
+    <a href='{{url_for('editCatalog', catalog_id=catalog.id)}}'>Edit</a>
+    <a href='{{url_for('deleteCatalog', catalog_id=catalog.id)}}'>Delete</a>
+  </div>
+  {% endfor %}
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+<html>
+<body>
+
+  <h1>Catalog for {{catalog.name}} (owner: {{owner.name}})</h1>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <li>{{message}}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  {% endwith %}
+
+  <a href='{{url_for('newItem', catalog_id=catalog.id)}}'>Make New Item<a>
+
+  {% for item in items %}
+  <div>
+    <h3>{{item.name}}</h3>
+    <ul>
+      <li>{{item.vintage}}</li>
+      <li>{{item.price}}</li>
+      <li>{{item.score}}</li>
+      <li>{{item.producer}}</li>
+      <li>{{item.region}}</li>
+      <li>{{item.grape}}</li>
+      <li>{{item.food}}</li>
+      <li>{{item.style}}</li>
+    </ul>
+    <a href='{{url_for('editItem', catalog_id=catalog.id, item_id=item.id)}}'>Edit<a>
+    <a href='{{url_for('deleteItem', catalog_id=catalog.id, item_id=item.id)}}'>Delete<a>
+  </div>
+  {% endfor %}
+
+  </br></br>
+  <a href='{{url_for('showCatalogs')}}'>Back to catalog list<a>
+
+</body>
+</html>

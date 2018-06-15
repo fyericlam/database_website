@@ -3,7 +3,7 @@
 
 <a href="{{url_for('showLogin')}}">Log in</a>
 
-  <h1>The Shops</h1>
+  <h1>The Catalogs</h1>
 
   {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -15,10 +15,10 @@
     {% endif %}
   {% endwith %}
 
-  {% for shop in shops %}
+  {% for catalog in catalogs %}
   <div>
-    <p>{{shop.name}}</p>
-    <a href='{{url_for('showCatalog', shop_id=shop.id)}}'>Catalog</a>
+    <p>{{catalog.name}}</p>
+    <a href='{{url_for('showItems', catalog_id=catalog.id)}}'>Show Items</a>
   </div>
   {% endfor %}
 

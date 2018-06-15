@@ -1,0 +1,12 @@
+<html>
+<body>
+
+  <h1>Delete {{deleteCatalog.name}}!?</h1>
+
+  <form method='POST' action='{{url_for('deleteCatalog', catalog_id=deleteCatalog.id)}}'>
+    <input type='submit' value='Delete'>
+    <a href='{{url_for('showCatalogs')}}'>Cancel</a>
+  </form>
+
+</body>
+</html>
