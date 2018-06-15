@@ -39,7 +39,7 @@ class Item(Base):
     producer = Column(String(50))
     region = Column(String(250))
     grape = Column(String(50))
-    food = Column(String(100))
+    food = Column(String(100), nullable=False)
     style = Column(String(100))
     catalog_id = Column(Integer, ForeignKey('catalog.id'))
     catalog = relationship(Catalog)

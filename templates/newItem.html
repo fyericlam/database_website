@@ -10,13 +10,13 @@
     <input type='text' size='20' name='vintage' placeholder='e.g., 1999'>
     <p>Price:</p>
     <input type='text' size='20' name='price' placeholder='e.g., $1,000'>
-    <p>Score:</p>
+    <p>Score (optional):</p>
     <input type='text' size='20' name='score' placeholder='e.g., 99/100'>
-    <p>Producer:</p>
+    <p>Producer (optional):</p>
     <input type='text' size='80' name='producer'>
-    <p>Region:</p>
+    <p>Region (optional):</p>
     <input type='text' size='80' name='region'>
-    <p>Grape:</p>
+    <p>Grape (optional):</p>
     <input type='text' size='80' name='grape'>
 
     </br></br>
@@ -63,9 +63,9 @@
       </label>
     </div>
 
-    <p>Style:</p>
+    <p>Style (optional):</p>
     <input type='text' size='80' name='style'>
-    
+
     </br></br>
     <input type='submit' value='Make'>
     <a href='{{url_for('showItems', catalog_id=catalog.id)}}'>Cancel<a>

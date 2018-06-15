@@ -3,6 +3,8 @@
 
   <h1>Edit Item {{editItem.name}}</h1>
 
+  <h3>(Just make necessary changes)</h3>
+
   <form method='POST' action='{{url_for('editItem', catalog_id=catalog.id, item_id=editItem.id)}}'>
     <p>Name:</p>
     <input type='text' size='80' name='name' placeholder='{{editItem.name}}'>
@@ -20,7 +22,7 @@
     <input type='text' size='80' name='grape' placeholder='{{editItem.grape}}'>
 
     </br></br>
-    <label for='food'>Food:</label>
+    <label for='food'>Food (currently {{editItem.food}}):</label>
     </br></br>
     <div class='radio'>
       <label>
@@ -65,7 +67,7 @@
 
     <p>Style:</p>
     <input type='text' size='80' name='style' placeholder='{{editItem.style}}'>
-        
+
     </br></br>
     <input type='submit' value='Edit'>
     <a href='{{url_for('showItems', catalog_id=catalog.id)}}'>Cancel<a>
