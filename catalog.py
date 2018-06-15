@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify,\
-    flash
+from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import flash
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -23,11 +23,6 @@ engine = create_engine('sqlite:///catalog.db',
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
-
-# Retrieve client info
-CLIENT_ID = \
-    json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
-APPLICATION_NAME = "Catalog Application"
 
 
 @app.route('/login')
@@ -61,6 +56,12 @@ def getUserID(email):
         return user.id
     except:
         return None
+
+
+# Retrieve client info for Google+ sign in
+CLIENT_ID = json.loads(open(
+    'client_secrets.json', 'r').read())['web']['client_id']
+APPLICATION_NAME = "Catalog Application"
 
 
 # Google+ sign in
@@ -153,7 +154,7 @@ def gconnect():
     output += ' " style="width: 300px; height: 300px;'
     output += ' border-radius: 150px; -webkit-border-radius: 150px;'
     output += ' -moz-border-radius: 150px;">'
-    flash('Now logged in as {}'.format(login_session['username']))
+    flash('Now logged in as {}!'.format(login_session['username']))
     print('Done!')
     return output
 
@@ -197,7 +198,8 @@ def fbconnect():
         'web']['app_id']
     app_secret = json.loads(
         open('fb_client_secrets.json', 'r').read())['web']['app_secret']
-    url = 'https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s' % (
+    url = "https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token\
+    &client_id={}&client_secret={}&fb_exchange_token={}".format(
         app_id, app_secret, access_token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
@@ -212,7 +214,7 @@ def fbconnect():
     '''
     token = result.split(',')[0].split(':')[1].replace('"', '')
 
-    url = 'https://graph.facebook.com/v2.8/me?access_token=%s&fields=name,id,email' % token
+    url = userinfo_url + "?access_token={}&fields=name,id,email".format(token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
     data = json.loads(result)
@@ -225,7 +227,9 @@ def fbconnect():
     login_session['access_token'] = token
 
     # Get user picture
-    url = 'https://graph.facebook.com/v2.8/me/picture?access_token=%s&redirect=0&height=200&width=200' % token
+    url = userinfo_url + \
+        "/picture?access_token={}&redirect=0&height=200&width=200".format(
+            token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
     data = json.loads(result)
@@ -247,7 +251,7 @@ def fbconnect():
     output += ' " style="width: 300px; height: 300px;'
     output += ' border-radius: 150px; -webkit-border-radius: 150px;'
     output += ' -moz-border-radius: 150px;">'
-    flash('Now logged in as {}'.format(login_session['username']))
+    flash('Now logged in as {}!'.format(login_session['username']))
     print('Done!')
     return output
 
@@ -258,11 +262,11 @@ def fbdisconnect():
     facebook_id = login_session['facebook_id']
     # Access token must be included to successfully logout
     access_token = login_session['access_token']
-    url = 'https://graph.facebook.com/%s/permissions?access_token={}'.format(
+    url = 'https://graph.facebook.com/{}/permissions?access_token={}'.format(
         facebook_id, access_token)
     h = httplib2.Http()
     result = h.request(url, 'DELETE')[1]
-    return "Successfully logged out"
+    return "Successfully logged out!"
 
 
 @app.route('/disconnect')
@@ -281,7 +285,7 @@ def disconnect():
         del login_session['picture']
         del login_session['user_id']
         del login_session['provider']
-        flash("Successfully logged out")
+        flash("Successfully logged out!")
         return redirect(url_for('showCatalogs'))
     else:
         flash("You were not logged in")
@@ -332,7 +336,12 @@ def editCatalog(catalog_id):
         return redirect('/login')
     editCatalog = session.query(Catalog).filter_by(id=catalog_id).one()
     if editCatalog.user_id != login_session['user_id']:
-        return "<script>function myFunction() {alert('Only owner is authorized to edit catalog.');} window.location='/catalogs/';</script><body onload='myFunction()'>"
+        return """<script> function myFunction() {
+        alert('Only owner is authorized to edit catalog');
+        }
+        window.location='/catalogs/';
+        </script>
+        <body onload='myFunction()'>"""
     if request.method == 'POST':
         editCatalog.name = request.form['name']
         session.add(editCatalog)
@@ -351,7 +360,12 @@ def deleteCatalog(catalog_id):
         return redirect('/login')
     deleteCatalog = session.query(Catalog).filter_by(id=catalog_id).one()
     if deleteCatalog.user_id != login_session['user_id']:
-        return "<script>function myFunction() {alert('Only owner is authorized to delete catalog.');} window.location='/catalogs/';</script><body onload='myFunction()'>"
+        return """<script> function myFunction() {
+        alert('Only owner is authorized to delete catalog');
+        }
+        window.location='/catalogs/';
+        </script>
+        <body onload='myFunction()'>"""
     if request.method == 'POST':
         session.delete(deleteCatalog)
         session.commit()
@@ -409,7 +423,12 @@ def newItem(catalog_id):
         return redirect('/login')
     catalog = session.query(Catalog).filter_by(id=catalog_id).one()
     if catalog.user_id != login_session['user_id']:
-        return "<script>function myFunction() {alert('Only owner is authorized to create item.'); window.location='/catalogs/';}</script><body onload='myFunction()'>"
+        return """<script> function myFunction() {
+        alert('Only owner is authorized to create item');
+        }
+        window.location='/catalogs/';
+        </script>
+        <body onload='myFunction()'>"""
     if request.method == 'POST':
         newItem = Item(name=request.form['name'],
                        vintage=request.form['vintage'],
@@ -437,9 +456,15 @@ def editItem(catalog_id, item_id):
         return redirect('/login')
     catalog = session.query(Catalog).filter_by(id=catalog_id).one()
     if catalog.user_id != login_session['user_id']:
-        return "<script>function myFunction() {alert('Only owner is authorized to edit item.'); window.location='/catalogs/';}</script><body onload='myFunction()'>"
+        return """<script> function myFunction() {
+        alert('Only owner is authorized to edit item');
+        }
+        window.location='/catalogs/';
+        </script>
+        <body onload='myFunction()'>"""
     editItem = session.query(Item).filter_by(id=item_id).one()
     if request.method == 'POST':
+        # Only update changes provided
         if request.form['name']:
             editItem.name = request.form['name']
         if request.form['vintage']:
@@ -476,7 +501,12 @@ def deleteItem(catalog_id, item_id):
         return redirect('/login')
     catalog = session.query(Catalog).filter_by(id=catalog_id).one()
     if catalog.user_id != login_session['user_id']:
-        return "<script>function myFunction() {alert('Only owner is authorized to delete item.'); window.location='/catalogs/';}</script><body onload='myFunction()'>"
+        return """<script> function myFunction() {
+        alert('Only owner is authorized to delete item');
+        }
+        window.location='/catalogs/';
+        </script>
+        <body onload='myFunction()'>"""
     deleteItem = session.query(Item).filter_by(id=item_id).one()
     if request.method == 'POST':
         session.delete(deleteItem)
@@ -490,6 +520,6 @@ def deleteItem(catalog_id, item_id):
 
 
 if __name__ == '__main__':
-    app.secret_key = 'ericlam'
+    app.secret_key = 'fyericlam'
     app.debug = True
     app.run(host='0.0.0.0', port=5000)

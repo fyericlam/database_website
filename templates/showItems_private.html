@@ -1,8 +1,14 @@
-<html>
-<body>
+{% extends "main.html" %}
+{% block content %}
 
-  <h1>Catalog for {{catalog.name}} (owner: {{owner.name}})</h1>
+  <header class="jumbotron-fluid">
+    <div class="col-sm-12 text-center bg-primary text-white">
+      <h1>Items in {{catalog.name}}</h1>
+      <h3>Owned by {{owner.name}}</h3>
+    </div>
+  </header>
 
+  <section class="col-sm-12 text-left bg-white text-muted">
   {% with messages = get_flashed_messages() %}
     {% if messages %}
     <ul>
@@ -12,29 +18,38 @@
     </ul>
     {% endif %}
   {% endwith %}
-
-  <a href='{{url_for('newItem', catalog_id=catalog.id)}}'>Make New Item<a>
+  </section>
 
   {% for item in items %}
-  <div>
-    <h3>{{item.name}}</h3>
-    <ul>
-      <li>{{item.vintage}}</li>
-      <li>{{item.price}}</li>
-      <li>{{item.score}}</li>
-      <li>{{item.producer}}</li>
-      <li>{{item.region}}</li>
-      <li>{{item.grape}}</li>
-      <li>{{item.food}}</li>
-      <li>{{item.style}}</li>
-    </ul>
-    <a href='{{url_for('editItem', catalog_id=catalog.id, item_id=item.id)}}'>Edit<a>
-    <a href='{{url_for('deleteItem', catalog_id=catalog.id, item_id=item.id)}}'>Delete<a>
-  </div>
+  <section class="col-sm-12 text-center">
+    <h3 class="text-primary">{{item.name}}</h3>
+
+    <div class="bg-info text-primary">
+      <p>{{item.vintage}}</p>
+      <p>{{item.price}}</p>
+      <p>{{item.score}}</p>
+      <p>{{item.producer}}</p>
+      <p>{{item.region}}</p>
+      <p>{{item.grape}}</p>
+      <p>{{item.food}}</p>
+      <p>{{item.style}}</p>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-3">
+        <a href='{{url_for('newItem', catalog_id=catalog.id)}}' class="text-warning">Make New Item</a>
+      </div>
+      <div class="col-sm-3">
+        <a href='{{url_for('editItem', catalog_id=catalog.id, item_id=item.id)}}' class="text-warning">Edit</a>
+      </div>
+      <div class="col-sm-3">
+        <a href='{{url_for('deleteItem', catalog_id=catalog.id, item_id=item.id)}}' class="text-warning">Delete</a>
+      </div>
+      <div class="col-sm-3">
+        <a href='{{url_for('showCatalogs')}}' class="text-warning">Back to catalog list</a>
+      </div>
+    </div>
+  </section>
   {% endfor %}
 
-  </br></br>
-  <a href='{{url_for('showCatalogs')}}'>Back to catalog list<a>
-
-</body>
-</html>
+{% endblock %}
