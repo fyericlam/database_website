@@ -1,7 +1,7 @@
 # Configuration (beginning)
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy import create_engine
 
 Base = declarative_base()
@@ -42,7 +42,8 @@ class Item(Base):
     food = Column(String(100), nullable=False)
     style = Column(String(100))
     catalog_id = Column(Integer, ForeignKey('catalog.id'))
-    catalog = relationship(Catalog)
+    catalog = relationship(Catalog, backref=backref(
+        'items', cascade='all, delete-orphan'))
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
 
