@@ -8,6 +8,17 @@
     </div>
   </header>
 
+  <section class="text-center">
+    <div class="row">
+      <div class="col-sm-6">
+        <a href='{{url_for('newItem', catalog_id=catalog.id)}}' class="text-warning">Make New Item</a>
+      </div>
+      <div class="col-sm-6">
+        <a href='{{url_for('showCatalogs')}}' class="text-warning">Back to catalog list</a>
+      </div>
+    </div>
+  </section>
+
   <section class="col-sm-12 text-left bg-white text-muted">
   {% with messages = get_flashed_messages() %}
     {% if messages %}
